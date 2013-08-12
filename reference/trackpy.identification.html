@@ -1,0 +1,189 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>identification Module &mdash; trackpy 0.2.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="trackpy 0.2.0 documentation" href="../index.html" />
+    <link rel="up" title="trackpy Package" href="trackpy.html" />
+    <link rel="prev" title="tracking Module" href="trackpy.tracking.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="trackpy.tracking.html" title="tracking Module"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">trackpy 0.2.0 documentation</a> &raquo;</li>
+          <li><a href="trackpy.html" accesskey="U"><tt class="docutils literal docutils literal docutils literal"><span class="pre">trackpy</span></tt> Package</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="identification-module">
+<h1><tt class="xref py py-mod docutils literal"><span class="pre">identification</span></tt> Module<a class="headerlink" href="#identification-module" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-trackpy.identification"></span><dl class="function">
+<dt id="trackpy.identification.band_pass">
+<tt class="descclassname">trackpy.identification.</tt><tt class="descname">band_pass</tt><big>(</big><em>img</em>, <em>p_rad</em>, <em>hwhm</em><big>)</big><a class="headerlink" href="#trackpy.identification.band_pass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Intended to be a replacement for bpass in the matlab/IDL code.</p>
+<p>Works by convolving a Gaussian with the image, than a box car and
+taking the difference.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>img</strong> &#8211; array of data</li>
+<li><strong>p_rad</strong> &#8211; the size of the window used for the convolution</li>
+<li><strong>hwhm</strong> &#8211; the hwhm of the Gaussian</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.7)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a> scaled between 0 and 1</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="trackpy.identification.find_local_max">
+<tt class="descclassname">trackpy.identification.</tt><tt class="descname">find_local_max</tt><big>(</big><em>img</em>, <em>d_rad</em>, <em>threshold=1e-15</em><big>)</big><a class="headerlink" href="#trackpy.identification.find_local_max" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is effectively a replacement for pkfnd in the matlab/IDL code.</p>
+<p>The output of this function is meant to be feed into <a class="reference internal" href="#trackpy.identification.subpixel_centroid" title="trackpy.identification.subpixel_centroid"><tt class="xref py py-func docutils literal"><span class="pre">subpixel_centroid()</span></tt></a></p>
+<p>The magic of numpy means this should work for any dimension data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>img</strong> &#8211; an ndarray representing the data to find the local maxes</li>
+<li><strong>d_rad</strong> &#8211; the radius of the dilation, the smallest possible spacing between local maximum</li>
+<li><strong>threshold</strong> &#8211; optional, voxels &lt; threshold are ignored.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">(d,N) array of the local maximums.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="trackpy.identification.gen_fake_data">
+<tt class="descclassname">trackpy.identification.</tt><tt class="descname">gen_fake_data</tt><big>(</big><em>list_of_locs</em>, <em>p_rad</em>, <em>hwhm</em>, <em>img_shape</em><big>)</big><a class="headerlink" href="#trackpy.identification.gen_fake_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to generate fake images for testing purposes</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="trackpy.identification.subpixel_centroid">
+<tt class="descclassname">trackpy.identification.</tt><tt class="descname">subpixel_centroid</tt><big>(</big><em>img</em>, <em>local_maxes</em>, <em>mask_rad</em><big>)</big><a class="headerlink" href="#trackpy.identification.subpixel_centroid" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is effectively a replacement for cntrd in the matlab/IDL code.</p>
+<p>Should work for any dimension data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>img</strong> &#8211; the data</li>
+<li><strong>local_maxes</strong> &#8211; a (d,N) array with the location of the local maximums (as generated by <a class="reference internal" href="#trackpy.identification.find_local_max" title="trackpy.identification.find_local_max"><tt class="xref py py-func docutils literal"><span class="pre">find_local_max()</span></tt></a>)</li>
+<li><strong>mask_rad</strong> &#8211; the radius of the mask used for the averaging.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">(d,N) array of positions, (d,) array of masses, (d,) array of r2,</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="trackpy.tracking.html"
+                        title="previous chapter"><tt class="docutils literal docutils literal"><span class="pre">tracking</span></tt> Module</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/reference/trackpy.identification.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="trackpy.tracking.html" title="tracking Module"
+             >previous</a> |</li>
+        <li><a href="../index.html">trackpy 0.2.0 documentation</a> &raquo;</li>
+          <li><a href="trackpy.html" ><tt class="docutils literal docutils literal docutils literal"><span class="pre">trackpy</span></tt> Package</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Thomas A Caswell.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
