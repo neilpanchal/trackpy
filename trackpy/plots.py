@@ -30,23 +30,20 @@ def make_axes(func):
         import matplotlib as mpl
         import matplotlib.pyplot as plt
         if kwargs.get('ax') is None:
-            kwargs['ax'] = plt.gca()
+            ax = kwargs['ax'] = plt.gca()
             # Delete legend keyword so remaining ones can be passed to plot().
-            try:
-                legend = kwargs['legend']
-            except KeyError:
-                legend = None
-            else:
-                del kwargs['legend']
+            legend = kwargs.pop('legend', None)
             result = func(*args, **kwargs)
-            if not (kwargs['ax'].get_legend_handles_labels() == ([], []) or \
-                    legend is False):
+            if not (legend is False or
+                    ax.get_legend_handles_labels() == ([], [])
+                    ):
                 plt.legend(loc='best')
             plt.show()
             return result
         else:
             return func(*args, **kwargs)
     return wrapper
+
 
 def make_fig(func):
     """See make_axes."""
@@ -61,6 +58,7 @@ def make_fig(func):
         else:
             return func(*args, **kwargs)
     return wrapper
+
 
 @make_axes
 def plot_traj(traj, colorby='particle', mpp=None, label=False,
@@ -172,7 +170,7 @@ def annotate(centroids, image, circle_size=None, color=None,
     ax : matplotlib axes object, defaults to current axes
     split_category : string, parameter to use to split the data into sections
         default None
-    split_thresh : single value or list of ints or floats to split 
+    split_thresh : single value or list of ints or floats to split
         particles into sections for plotting in multiple colors.
         List items should be ordered by increasing value.
         default None
@@ -180,7 +178,7 @@ def annotate(centroids, image, circle_size=None, color=None,
         the `Axes.imshow(...)` command the displays the image
     plot_style : dictionary of keyword arguments passed through to
         the `Axes.plot(...)` command that marks the features
-    
+
     Returns
     ------
     axes
@@ -193,7 +191,7 @@ def annotate(centroids, image, circle_size=None, color=None,
         if 'marker_size' not in plot_style:
             plot_style['marker_size'] = np.sqrt(circle_size)  # area vs. dia.
         else:
-            raise ValueError("passed in both 'marker_size' and 'circle_size'") 
+            raise ValueError("passed in both 'marker_size' and 'circle_size'")
 
     _plot_style = dict(markersize=15, markeredgewidth=2,
                        markerfacecolor='none', markeredgecolor='r',
@@ -240,19 +238,19 @@ def annotate(centroids, image, circle_size=None, color=None,
                              "plus 1")
         low = centroids[split_category] < split_thresh[0]
         _plot_style.update(markeredgecolor=color[0])
-        ax.plot(centroids['x'][low], centroids['y'][low], 
+        ax.plot(centroids['x'][low], centroids['y'][low],
                 **_plot_style)
 
         for c, (bot, top) in zip(color[1:-1], pairwise(split_thresh)):
             indx = ((centroids[split_category] >= bot) &
                     (centroids[split_category] < top))
             _plot_style.update(markeredgecolor=c)
-            ax.plot(centroids['x'][indx], centroids['y'][indx], 
+            ax.plot(centroids['x'][indx], centroids['y'][indx],
                     **_plot_style)
 
         high = centroids[split_category] >= split_thresh[-1]
         _plot_style.update(markeredgecolor=color[-1])
-        ax.plot(centroids['x'][high], centroids['y'][high], 
+        ax.plot(centroids['x'][high], centroids['y'][high],
                 **_plot_style)
     return ax
 
