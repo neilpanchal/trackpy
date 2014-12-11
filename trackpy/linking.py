@@ -10,7 +10,7 @@ import numpy as np
 from scipy.spatial import cKDTree
 import pandas as pd
 
-from .utils import print_update
+from .utils import logger
 from .try_numba import try_numba_autojit, NUMBA_AVAILABLE
 
 __all__ = ['HashTable', 'TreeFinder', 'Point', 'PointND', 'IndexedPointND',
@@ -536,8 +536,7 @@ def link_df(features, search_range, memory=0,
                                            "%d".format(frame_no))
         features['particle'].update(labels)
 
-        msg = "Frame %d: %d trajectories present" % (frame_no, len(labels))
-        print_update(msg)
+        logger.info("Frame %d: %d trajectories present", frame_no, len(labels))
 
     if retain_index:
         features.index = orig_index
@@ -662,8 +661,7 @@ def link_df_iter(features, search_range, memory=0,
             features.sort('particle', inplace=True)
             features.reset_index(drop=True, inplace=True)
 
-        msg = "Frame %d: %d trajectories present" % (frame_no, len(labels))
-        print_update(msg)
+        logger.info("Frame %d: %d trajectories present", frame_no, len(labels))
 
         yield features
 

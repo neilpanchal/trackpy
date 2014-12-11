@@ -9,6 +9,7 @@ from .feature import *
 from .preprocessing import bandpass
 from .framewise_data import *
 from . import utils
+from .utils import logger, handle_logging, ignore_logging
 from .try_numba import try_numba_autojit, enable_numba, disable_numba
 
 # Import all of pims top-level for convenience.
