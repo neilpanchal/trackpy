@@ -1,12 +1,14 @@
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 import six
+import logging
 
 import numpy as np
 from scipy.ndimage.filters import uniform_filter
 from scipy.ndimage.fourier import fourier_gaussian
 
-from .utils import logger 
+logger = logging.getLogger(__name__)
+__all__ = ['bandpass', 'scale_to_gamut']
 
 
 # When loading module, try to use pyFFTW ("Fastest Fourier Transform in the
@@ -25,7 +27,7 @@ else:
     def _maybe_align(a):
         global planned
         if not planned:
-            logger.warn("Note: FFTW is configuring itself. This will take " +
+            logger.info("Note: FFTW is configuring itself. This will take " +
                         "several seconds, but subsequent calls will run " +
                         "*much* faster.")
             planned = True 

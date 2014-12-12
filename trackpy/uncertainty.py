@@ -8,6 +8,9 @@ from scipy.ndimage import morphology
 from .preprocessing import bandpass
 from .masks import binary_mask
 
+__all__ = ['roi', 'measure_noise', 'static_error']
+
+
 def roi(image, diameter, threshold=1):
     """Return a mask selecting the neighborhoods of bright regions.
     See Biophysical journal 88(1) 623-638 Figure C.
@@ -27,10 +30,12 @@ def roi(image, diameter, threshold=1):
     signal_mask = morphology.binary_dilation(signal_mask, structure=structure)
     return signal_mask
 
+
 def measure_noise(image, diameter, threshold):
     "Compute the standard deviation of the dark pixels outside the signal."
     signal_mask = roi(image, diameter, threshold)
     return image[~signal_mask].mean(), image[~signal_mask].std()
+
 
 def static_error(features, noise, diameter, noise_size=1):
     """Compute the uncertainty in particle position ("the static error").

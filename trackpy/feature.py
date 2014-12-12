@@ -2,6 +2,7 @@ from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 import six
 import warnings
+import logging
 
 import numpy as np
 import pandas as pd
@@ -12,14 +13,15 @@ from pandas import DataFrame, Series
 
 from . import uncertainty
 from .preprocessing import bandpass, scale_to_gamut
-from .utils import record_meta, logger
+from .utils import record_meta
 from .masks import *
 import trackpy  # to get trackpy.__version__
 
 from .try_numba import try_numba_autojit, NUMBA_AVAILABLE
 
-__all__ = ['locate', 'batch', 'percentile_threshold', 'local_maxima',
-           'refine', 'estimate_mass', 'estimate_size']
+logger = logging.getLogger(__name__)
+__all__ = ['percentile_threshold', 'local_maxima', 'refine', 'locate',
+           'batch', 'estimate_mass', 'estimate_size']
 
 
 def percentile_threshold(image, percentile):

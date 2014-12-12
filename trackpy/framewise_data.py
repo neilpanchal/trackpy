@@ -8,8 +8,8 @@ import pandas as pd
 
 from .utils import print_update
 
-__all__ = ['FramewiseData', 'PandasHDFStore', 'PandasHDFStoreBig',
-           'PandasHDFStoreSingleNode']
+__all__ = ['PandasHDFStore', 'PandasHDFStoreBig', 'PandasHDFStoreSingleNode',
+           'FramewiseData']
 
 
 class FramewiseData(object):
