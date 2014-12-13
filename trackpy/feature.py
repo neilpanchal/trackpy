@@ -14,7 +14,7 @@ from pandas import DataFrame, Series
 from . import uncertainty
 from .preprocessing import bandpass, scale_to_gamut
 from .utils import record_meta
-from .masks import *
+from .masks import binary_mask, r_squared_mask, cosmask, sinmask
 import trackpy  # to get trackpy.__version__
 
 from .try_numba import try_numba_autojit, NUMBA_AVAILABLE
@@ -27,7 +27,6 @@ __all__ = ['percentile_threshold', 'local_maxima', 'refine', 'locate',
 def percentile_threshold(image, percentile):
     """Find grayscale threshold based on distribution in image."""
 
-    ndim = image.ndim
     not_black = image[np.nonzero(image)]
     if len(not_black) == 0:
         return np.nan
@@ -74,7 +73,7 @@ def local_maxima(image, radius, percentile=64, margin=None):
 
     # Return coords in as a numpy array shaped so it can be passed directly
     # to the DataFrame constructor.
-    return maxima 
+    return maxima
 
 
 def estimate_mass(image, radius, coord):
