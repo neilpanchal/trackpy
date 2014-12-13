@@ -183,6 +183,8 @@ except ImportError:
 
 def print_update(message):
     "Print a message immediately; do not wait for current execution to finish."
+    warnings.warn("print_update has been deprecated and will be removed in "
+                  "version 0.4", TrackpyDeprecationWarning, stacklevel=1)
     try:
         clear_output()
     except Exception:
@@ -249,3 +251,17 @@ def quiet(suppress=True):
         trackpy.logger.setLevel(logging.WARN)
     else:
         trackpy.logger.setLevel(logging.INFO)
+
+
+class TrackpyDeprecationWarning(UserWarning):
+    """
+    A class for issuing deprecation warnings for Matplotlib users.
+
+    In light of the fact that Python builtin DeprecationWarnings are ignored
+    by default as of Python 2.7 (see link below), this class was put in to
+    allow for the signaling of deprecation, but via UserWarnings which are not
+    ignored by default.
+
+    http://docs.python.org/dev/whatsnew/2.7.html#the-future-for-python-2-x
+    """
+    pass
