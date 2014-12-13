@@ -6,7 +6,9 @@ from abc import ABCMeta, abstractmethod, abstractproperty
 
 import pandas as pd
 
-from .utils import print_update
+import logging
+
+logger = logging.getLogger(__name__)
 
 __all__ = ['PandasHDFStore', 'PandasHDFStoreBig', 'PandasHDFStoreSingleNode',
            'FramewiseData']
@@ -300,14 +302,14 @@ class PandasHDFStoreSingleNode(FramewiseData):
         return frame_nos
 
     def _validate_node(self, use_tabular_copy):
-        # The HDFStore might be non-tabular, which means we cannot select a 
+        # The HDFStore might be non-tabular, which means we cannot select a
         # subset, and this whole structure will not work.
         # For convenience, this can rewrite the table into a tabular node.
         if use_tabular_copy:
             self.key = _make_tabular_copy(self.filename, self.key)
 
         pandas_type = getattr(getattr(getattr(
-            self.store._handle.root, self.key, None), '_v_attrs', None), 
+            self.store._handle.root, self.key, None), '_v_attrs', None),
             'pandas_type', None)
         if not pandas_type == 'frame_table':
             raise ValueError("This node is not tabular. Call with "
@@ -318,6 +320,6 @@ def _make_tabular_copy(store, key):
     """Copy the contents nontabular node in a pandas HDFStore
     into a tabular node"""
     tabular_key = key + '/tabular'
-    print_update("Making a tabular copy of %s at %s" % (key, tabular_key))
+    logger.info("Making a tabular copy of %s at %s" % (key, tabular_key))
     store.append(tabular_key, store.get(key), data_columns=True)
     return tabular_key
